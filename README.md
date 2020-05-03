@@ -4,7 +4,7 @@ This is the React frontend app I created to make it easier to consume the FULLY 
 # WARNING
 This project has not been finished yet, it's not even deployable in Kubernetes by now, it's a work in progress. As soon as I have a 
 final version for it, it will be deployable in Kubernetes and you'll be able to access it making use of all the <b>POWER</b> that 
-our backend api provides.
+the backend api provides.
 
 #### Developer Info
 Name: Vanderson Assis
