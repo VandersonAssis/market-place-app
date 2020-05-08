@@ -11,15 +11,22 @@ const ApiAutocomplete = props => {
         sendRequest(props.url, 'GET');
     }, []);
 
+    const dummyAutocomplete = <Autocomplete
+        id="combo-box-demo"
+        className="autocomplete"
+        options={[]}
+        style={{ pointerEvents: "none" }}
+        renderInput={(params) => <TextField {...params} label={props.placeHolder ? props.placeHolder : 'Select a value'} />} />
+
     const renderComponent = () => {
         if (loading)
-            return <LoadingIndicator />
+            return <LoadingIndicator >{dummyAutocomplete}</LoadingIndicator>
         else
             return <Autocomplete
                 id="combo-box-demo"
+                className="autocomplete"
                 options={data.length > 0 ? data : []}
                 getOptionLabel={(option) => option.name}
-                style={{ width: 300 }}
                 onChange={(event, value) => props.onSelectionCallback(value)}
                 renderInput={(params) => <TextField {...params} label={props.placeHolder ? props.placeHolder : 'Select a value'} />}
             />
