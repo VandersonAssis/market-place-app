@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 
-export default class Purchase extends Component {
-    render() {
-        return (
-            <>
-                <h3>Purchase view</h3>
-            </>
-        )
-    }
+export default function Purchase() {
+    return (
+        <>
+            <h3>Purchase view</h3>
+        </>
+    )
 }

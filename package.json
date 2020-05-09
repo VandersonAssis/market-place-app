@@ -35,6 +35,11 @@
     ]
   },
   "devDependencies": {
+    "grunt": "^1.1.0",
+    "grunt-contrib-clean": "^2.0.0",
+    "grunt-contrib-less": "^2.0.0",
+    "grunt-contrib-watch": "^1.1.0",
+    "jit-grunt": "^0.10.0",
     "webpack": "^4.42.0"
   }
 }

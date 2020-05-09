@@ -14,7 +14,7 @@ E-Mail: assis.vanderson@gmail.com
 Ps.: I'm currently living in Brazil but willing to relocate to another country. So if you have any opportunity you want to discuss, please reach out!
 
 ### Technologies Used System Wide
-- React 16 (Frontend App)
+#### Backend:
 - Java 12
 - MongoDB
 - Kubernetes (Container Orchestration)
@@ -38,6 +38,13 @@ Ps.: I'm currently living in Brazil but willing to relocate to another country. 
 - Mockito
 - Gson
 - Maven
+
+#### Frontend:
+- React 16 (Frontend App)
+- Material-UI
+- Less (Helps a lot when coding CSS)
+- Grunt (Task automation)
+- Node JS
 
 ### Deploy
 Please follow the following repository's instructions https://github.com/VandersonAssis/market-place-kubernetes

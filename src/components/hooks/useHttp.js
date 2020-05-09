@@ -27,7 +27,7 @@ const useHttp = () => {
     const sendRequest = (url, method, body) => {
         dispatchHttp({ type: 'SEND' })
 
-        setTimeout(() => {
+        // setTimeout(() => {
             fetch(url, { method: method, body: body, headers: { 'Content-Type': 'application/json' } })
                 .then(res => {
                     return res.json();
@@ -36,7 +36,7 @@ const useHttp = () => {
                 }).catch(error => {
                     dispatchHttp({ type: 'ERROR', errorMessage: 'Something went wrong! A more descriptive log has been saved on the server' });
                 })
-        }, 1000);
+        // }, 1500);
     }
 
     return {
