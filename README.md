@@ -41,6 +41,8 @@ Ps.: I'm currently living in Brazil but willing to relocate to another country. 
 
 #### Frontend:
 - React 16 (Frontend App)
+- Redux
+- React Hooks
 - Material-UI
 - Less (Helps a lot when coding CSS)
 - Grunt (Task automation)

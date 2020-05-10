@@ -1,6 +1,6 @@
 import React from 'react';
-import './css/ApiAutocomplete.css';
-import './css/LoadingIndicator.css';
+import '../ui/css/ApiAutocomplete.css';
+import '../ui/css/LoadingIndicator.css';
 import './css/Desktop.css';
 import { Grid, Box } from '@material-ui/core';
 
