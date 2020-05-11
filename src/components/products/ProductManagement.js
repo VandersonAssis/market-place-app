@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import productManagementActions from '../../redux/constants/productManagement.constants';
 import ApiAutocomplete from '../ui/ApiAutocomplete'
-import './css/ProductManagement.css';
-import { Box, Paper, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@material-ui/core';
-import { ExpandMore } from '@material-ui/icons';
+import { Box, Paper } from '@material-ui/core';
 import AddNewProduct from './AddNewProduct';
+import ProductList from './ProductList';
 
 export default function ProductManagement() {
     const dispatch = useDispatch();
@@ -17,7 +16,7 @@ export default function ProductManagement() {
     return (
         <>
             <Paper >
-                <ApiAutocomplete placeHolder='Sellers' onSelectionCallback={sellerSelected} url={process.env.REACT_APP_SELLERS_API_URL} />
+                <ApiAutocomplete placeHolder='Select a seller' onSelectionCallback={sellerSelected} url={process.env.REACT_APP_SELLERS_API_URL} />
             </Paper>
 
             <Box marginTop={1} >
@@ -28,28 +27,7 @@ export default function ProductManagement() {
 
             <Box marginTop={1} >
                 <Paper >
-                    <h2>List of products here</h2>
-
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                    sit amet blandit leo lobortis eget.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                    sit amet blandit leo lobortis eget.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                    sit amet blandit leo lobortis eget.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                    sit amet blandit leo lobortis eget.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                    sit amet blandit leo lobortis eget.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                    sit amet blandit leo lobortis eget.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                    sit amet blandit leo lobortis eget.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                    sit amet blandit leo lobortis eget.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                    sit amet blandit leo lobortis eget.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-                    sit amet blandit leo lobortis eget.
+                    <ProductList />                    
                 </Paper>
             </Box>
         </>

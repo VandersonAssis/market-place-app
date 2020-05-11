@@ -14,7 +14,7 @@ export default function App() {
           <Desktop >
             <Route component={({ match }) =>
               <div>
-                <Route path="/product" component={ProductManagement} />
+                <Route path="/products" component={ProductManagement} />
                 <Route path="/purchase" component={Purchase} />
               </div>
             } />

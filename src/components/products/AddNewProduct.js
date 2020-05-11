@@ -4,12 +4,12 @@ import { ExpansionPanel, ExpansionPanelSummary, ExpansionPanelDetails } from '@m
 import { ExpandMore } from '@material-ui/icons';
 
 export default function AddNewProduct() {
-    const seller = useSelector(state => state.seller);
+    const selectedSeller = useSelector(state => state.selectedSeller);
 
     return (
         <ExpansionPanel >
             <ExpansionPanelSummary expandIcon={<ExpandMore />} aria-controls="panel1a-content" id="panel1a-header" >
-                Add new product for&nbsp;<span className="selected-seller" >[{seller.name}]</span>
+                Add new product for&nbsp;<span className="selected-seller" >[{selectedSeller.name}]</span>
             </ExpansionPanelSummary>
 
             <ExpansionPanelDetails>

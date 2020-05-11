@@ -5,6 +5,7 @@ const LoadingIndicator = props => (
     <div className="lds-ring">
       <div />
     </div>
+    
     <div className="component" >
       {props.children}
     </div>
