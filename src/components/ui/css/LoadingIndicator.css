@@ -1,5 +1,6 @@
 .ring-container {
   display: inline-block;
+  width: 100%;
 }
 .component {
   opacity: 40%;
@@ -13,6 +14,7 @@
 .lds-ring div {
   box-sizing: border-box;
   position: absolute;
+  margin-top: 6px;
   width: 44px;
   height: 44px;
   border: 6px solid #ff2058;

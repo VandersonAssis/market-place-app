@@ -4,9 +4,14 @@ body {
   background-color: #f3f3f3;
 }
 
+a {
+  color: white;
+  text-decoration: none;
+}
+
 .top-menu-container {
   background-color: #2c3e50;
-  padding: 10px;
+  padding: 2px;
   color: white;
 }
 
@@ -20,7 +25,14 @@ body {
   font-weight: 600;
 }
 
-.top-menu-item {  
+.top-menu-item {
+  @paddingVertical: 10px;
+  @paddingHorizontal: 22px;
   margin-left: 15px;
   display: inline-block;
+  background-color: #297075;
+  padding-top: @paddingVertical;
+  padding-bottom: @paddingVertical;
+  padding-left: @paddingHorizontal;
+  padding-right: @paddingHorizontal;
 }

@@ -3,9 +3,13 @@ body {
   margin: 0px;
   background-color: #f3f3f3;
 }
+a {
+  color: white;
+  text-decoration: none;
+}
 .top-menu-container {
   background-color: #2c3e50;
-  padding: 10px;
+  padding: 2px;
   color: white;
 }
 .top-menu-bottom-container {
@@ -19,4 +23,9 @@ body {
 .top-menu-item {
   margin-left: 15px;
   display: inline-block;
+  background-color: #297075;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 22px;
+  padding-right: 22px;
 }
