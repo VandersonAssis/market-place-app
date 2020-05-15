@@ -1,4 +1,15 @@
 .container {
+  padding-top: 7px;
   padding-left: 7px;
   padding-right: 7px;
+  width: 100%;
+}
+.products-label {
+  color: #676767;
+  font-weight: 500;
+  width: 100%;
+}
+.grid-list {
+  width: 500;
+  height: 450;
 }
