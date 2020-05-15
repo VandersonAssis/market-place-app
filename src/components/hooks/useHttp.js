@@ -12,8 +12,11 @@ const httpReducer = (currentState, action) => {
             return { ...currentState, loading: false, data: action.data };
         case 'ERROR':
             return { loading: false, error: action.errorMessage };
-        case 'CLEAR':
+        case 'CLEAR': {
+            console.log('Cleared...');
+            
             return initialState;
+        }
         default:
             throw new Error('Invalid http type option!');
     }
@@ -31,7 +34,7 @@ const useHttp = () => {
         console.log('Fetching ' + url + ' url');
         
 
-        setTimeout(() => {
+        // setTimeout(() => {
             fetch(url, { method: method, body: body, headers: { 'Content-Type': 'application/json' } })
                 .then(res => {
                     return res.json();
@@ -40,7 +43,7 @@ const useHttp = () => {
                 }).catch(error => {
                     dispatchHttp({ type: 'ERROR', errorMessage: 'Something went wrong! A more descriptive log has been saved on the server' });
                 })
-        }, 1500);
+        // }, 1500);
     }
 
     return {
