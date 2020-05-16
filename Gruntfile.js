@@ -8,7 +8,8 @@ module.exports = function (grunt) {
                     "src/components/ui/css/LoadingIndicator.css": "src/components/ui/css/LoadingIndicator.less",
                     "src/components/ui/css/ApiAutocomplete.css": "src/components/ui/css/ApiAutocomplete.less",
                     "src/components/products/css/ProductManagement.css": "src/components/products/css/ProductManagement.less",
-                    "src/components/products/css/ProductList.css": "src/components/products/css/ProductList.less"
+                    "src/components/products/css/ProductList.css": "src/components/products/css/ProductList.less",
+                    "src/components/products/css/AddNewProduct.css": "src/components/products/css/AddNewProduct.less"
                 }
             }
         },
