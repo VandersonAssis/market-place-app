@@ -1,5 +1,5 @@
 import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, FormControl, TextField, Grid, Box, Button, unstable_StrictModeFade, Popover } from '@material-ui/core';
-import { ExpandMore, SmsOutlined } from '@material-ui/icons';
+import { ExpandMore } from '@material-ui/icons';
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import useHttp from '../hooks/useHttp';
@@ -8,11 +8,12 @@ import ErrorPopAnchor from '../ui/ErrorPopAnchor';
 
 export default function AddNewProduct() {
     const { sendRequest } = useHttp();
+    const { initializeRuler, validate, allFieldsValid } = useRuler();
 
     const selectedSeller = useSelector(state => state.selectedSeller);
-    
+
     const [enteredName, setEnteredName] = useState('');
-    const [enteredModel, setEnteredModel] = useState('');    
+    const [enteredModel, setEnteredModel] = useState('');
     const [enteredDescription, setEnteredDescription] = useState('');
     const [enteredPrice, setEnteredPrice] = useState();
     const [enteredQuantity, setEnteredQuantity] = useState();
@@ -22,19 +23,17 @@ export default function AddNewProduct() {
     const enteredDescriptionRef = useRef();
     const enteredPriceRef = useRef();
     const enteredQuantityRef = useRef();
-
-    const [rules, setRules] = useState([]);
+    
     const [inputInconsistencies, setInputInconsistencies] = useState('');
 
-    const addNewRule = (newRule) => setRules(rules => [...rules, newRule]);
-
-    const { initializeRuler, validate } = useRuler();
+    //const inputsToValidateUponSubmission = new Array(enteredNameRef, enteredModelRef);
 
     useEffect(() => {
-        initializeRuler(addNewRule,
+        initializeRuler(
             [
                 {
                     fieldName: 'enteredName',
+                    componentRef: enteredNameRef,
                     rules: [
                         { name: 'range', constraints: [3, 51] },
                         { name: 'contains', constraints: ['letter'] }
@@ -42,6 +41,7 @@ export default function AddNewProduct() {
                 },
                 {
                     fieldName: 'enteredModel',
+                    ref: enteredModelRef,
                     rules: [
                         { name: 'range', constraints: [1, 25] },
                         { name: 'contains', constraints: ['letter'] }
@@ -49,6 +49,7 @@ export default function AddNewProduct() {
                 },
                 {
                     fieldName: 'enteredDescription',
+                    enteredDescriptionRef,
                     rules: [
                         { name: 'range', constraints: [15, 255] },
                         { name: 'contains', constraints: ['letter'] }
@@ -60,6 +61,11 @@ export default function AddNewProduct() {
 
     const submitNewProduct = event => {
         event.preventDefault();
+
+        if (!allFieldsValid()) {
+            alert('There is one or more invalid input');
+            return;
+        }
 
         const newProduct = {
             idSeller: selectedSeller.id, model: enteredModel, name: enteredName, description: enteredDescription,
@@ -81,8 +87,17 @@ export default function AddNewProduct() {
 
     const handleChange = (fieldName, setField, value) => {
         setField(value);
-        let inconsistencies = validate(rules, fieldName, value);
+        let inconsistencies = validate(fieldName, value);
         setInputInconsistencies(inconsistencies);
+    }
+
+    const validateInputs = (fieldName, value) => {
+        let inconsistencies = validate(fieldName, value);
+
+        if (inconsistencies && inconsistencies.length > 0)
+            return false
+        else
+            return true;
     }
 
     return (
@@ -93,7 +108,7 @@ export default function AddNewProduct() {
 
             <ExpansionPanelDetails className="panel-details" >
                 <Box width="100%" >
-                    <form onSubmit={submitNewProduct} >                        
+                    <form onSubmit={submitNewProduct} >
                         <TextField ref={enteredNameRef} className="text-field" label="Name" autoFocus={true} value={enteredName}
                             onChange={event => { handleChange('enteredName', setEnteredName, event.target.value) }} />
                         <ErrorPopAnchor component={enteredNameRef} inconsistencies={inputInconsistencies} />
@@ -101,8 +116,8 @@ export default function AddNewProduct() {
                         <br />
                         <TextField ref={enteredModelRef} className="text-field" label="Model" value={enteredModel}
                             onChange={event => { handleChange('enteredModel', setEnteredModel, event.target.value) }} />
-                        <ErrorPopAnchor component={enteredModelRef} inconsistencies={inputInconsistencies} />                            
-                        
+                        <ErrorPopAnchor component={enteredModelRef} inconsistencies={inputInconsistencies} />
+
                         <br />
                         <TextField ref={enteredPriceRef} className="text-field" label="Price" type="number" value={enteredPrice}
                             onChange={event => { setEnteredPrice(event.target.value) }} />
