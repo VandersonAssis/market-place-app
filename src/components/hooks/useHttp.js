@@ -31,9 +31,7 @@ const useHttp = () => {
         clear();
 
         dispatchHttp({ type: 'SEND' })
-        console.log('Fetching ' + url + ' url');
         
-
         // setTimeout(() => {
             fetch(url, { method: method, body: body, headers: { 'Content-Type': 'application/json' } })
                 .then(res => {
