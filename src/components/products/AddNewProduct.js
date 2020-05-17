@@ -1,20 +1,30 @@
-import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, FormControl, TextField, Grid, Box, Button, unstable_StrictModeFade } from '@material-ui/core';
+import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, FormControl, TextField, Grid, Box, Button, unstable_StrictModeFade, Popover } from '@material-ui/core';
 import { ExpandMore, SmsOutlined } from '@material-ui/icons';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import useHttp from '../hooks/useHttp';
 import useRuler from '../hooks/useRuler';
+import ErrorPopAnchor from '../ui/ErrorPopAnchor';
 
 export default function AddNewProduct() {
     const { sendRequest } = useHttp();
 
     const selectedSeller = useSelector(state => state.selectedSeller);
-    const [enteredModel, setEnteredModel] = useState('');
+    
     const [enteredName, setEnteredName] = useState('');
+    const [enteredModel, setEnteredModel] = useState('');    
     const [enteredDescription, setEnteredDescription] = useState('');
     const [enteredPrice, setEnteredPrice] = useState();
     const [enteredQuantity, setEnteredQuantity] = useState();
+
+    const enteredNameRef = useRef();
+    const enteredModelRef = useRef();
+    const enteredDescriptionRef = useRef();
+    const enteredPriceRef = useRef();
+    const enteredQuantityRef = useRef();
+
     const [rules, setRules] = useState([]);
+    const [inputInconsistencies, setInputInconsistencies] = useState('');
 
     const addNewRule = (newRule) => setRules(rules => [...rules, newRule]);
 
@@ -43,7 +53,7 @@ export default function AddNewProduct() {
                         { name: 'range', constraints: [15, 255] },
                         { name: 'contains', constraints: ['letter'] }
                     ]
-                }                
+                }
             ]
         )
     }, []);
@@ -64,15 +74,15 @@ export default function AddNewProduct() {
         setEnteredName('');
         setEnteredModel('');
         setEnteredDescription('');
+        setInputInconsistencies('');
         setEnteredPrice(0);
         setEnteredQuantity(0);
     };
 
     const handleChange = (fieldName, setField, value) => {
         setField(value);
-        let test = validate(rules, fieldName, value);
-        console.log(`Validate in newProduct ${test}`);
-        
+        let inconsistencies = validate(rules, fieldName, value);
+        setInputInconsistencies(inconsistencies);
     }
 
     return (
@@ -83,21 +93,30 @@ export default function AddNewProduct() {
 
             <ExpansionPanelDetails className="panel-details" >
                 <Box width="100%" >
-                    <form onSubmit={submitNewProduct} >
-                        <TextField className="text-field" label="Name" autoFocus={true} value={enteredName}
+                    <form onSubmit={submitNewProduct} >                        
+                        <TextField ref={enteredNameRef} className="text-field" label="Name" autoFocus={true} value={enteredName}
                             onChange={event => { handleChange('enteredName', setEnteredName, event.target.value) }} />
+                        <ErrorPopAnchor component={enteredNameRef} inconsistencies={inputInconsistencies} />
+
                         <br />
-                        <TextField className="text-field" label="Model" value={enteredModel}
+                        <TextField ref={enteredModelRef} className="text-field" label="Model" value={enteredModel}
                             onChange={event => { handleChange('enteredModel', setEnteredModel, event.target.value) }} />
+                        <ErrorPopAnchor component={enteredModelRef} inconsistencies={inputInconsistencies} />                            
+                        
                         <br />
-                        <TextField className="text-field" label="Price" type="number" value={enteredPrice}
+                        <TextField ref={enteredPriceRef} className="text-field" label="Price" type="number" value={enteredPrice}
                             onChange={event => { setEnteredPrice(event.target.value) }} />
+                        <ErrorPopAnchor component={enteredPriceRef} inconsistencies={inputInconsistencies} />
+
                         <br />
-                        <TextField className="text-field" label="Quantity" type="number" value={enteredQuantity}
+                        <TextField ref={enteredQuantityRef} className="text-field" label="Quantity" type="number" value={enteredQuantity}
                             onChange={event => { setEnteredQuantity(event.target.value) }} />
+                        <ErrorPopAnchor component={enteredQuantityRef} inconsistencies={inputInconsistencies} />
+
                         <br />
-                        <TextField className="text-field" label="Description" multiline={true} rows="4" value={enteredDescription}
+                        <TextField ref={enteredDescriptionRef} className="text-field" label="Description" multiline={true} rows="4" value={enteredDescription}
                             onChange={event => { handleChange('enteredDescription', setEnteredDescription, event.target.value) }} />
+                        <ErrorPopAnchor component={enteredDescriptionRef} inconsistencies={inputInconsistencies} />
 
                         <br /> <br />
                         <Button color="primary" type="submit" variant="contained" >
