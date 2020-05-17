@@ -28,7 +28,7 @@ const useRuler = () => {
                   }
 
                   if (value.length < rule.constraints[0] || value.length > rule.constraints[1])
-                    inconsistencies.push(`Length should range from ${rule.constraints[0]} to ${rule.constraints[1]}`);
+                    inconsistencies.push(`${this.fieldName}|||Length should range from ${rule.constraints[0]} to ${rule.constraints[1]}`);
 
                   break;
                 } case 'contains': {
@@ -41,7 +41,7 @@ const useRuler = () => {
                   }
 
                   if (rule.constraints[0] === 'letter' && !!!value.match('^(?=.*[A-Za-z])'))
-                    inconsistencies.push('Should contain at least one letter');
+                    inconsistencies.push(`${this.fieldName}|||Should contain at least one letter`);
 
                   break;
                 } default: {
@@ -59,11 +59,11 @@ const useRuler = () => {
 
   const validate = (rules, fieldName, value) => {
     for (var rule of rules) {
-        if (rule.fieldName === fieldName) {
-            return rule.executeRule(value);
-        }
+      if (rule.fieldName === fieldName) {
+        return rule.executeRule(value);
+      }
     }
-};
+  };
 
   return {
     initializeRuler,
