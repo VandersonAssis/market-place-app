@@ -1,13 +1,22 @@
-const useRuler = () => {
-  const initializeRuler = (setRulesState, ruler) => {
-    for (var rulerEntry of ruler) {
+import { useState } from "react";
 
-      setRulesState(
+const useRuler = () => {
+  let componentRefs = new Array();
+  const [rules, setRules] = useState([]);
+
+  const addNewRule = (newRule) => setRules(rules => [...rules, newRule]);
+
+  const initializeRuler = (ruler) => {
+    for (var rulerEntry of ruler) {
+      componentRefs.push(rulerEntry.componentRef);
+
+      addNewRule(
         {
           fieldName: rulerEntry.fieldName,
           executeRule(value) {
             let inconsistencies = new Array();
             let rules;
+            let key = 0;
 
             for (var rulerT of ruler) {
               if (rulerT.fieldName === this.fieldName) {
@@ -28,7 +37,7 @@ const useRuler = () => {
                   }
 
                   if (value.length < rule.constraints[0] || value.length > rule.constraints[1])
-                    inconsistencies.push(`${this.fieldName}|||Length should range from ${rule.constraints[0]} to ${rule.constraints[1]}`);
+                    inconsistencies.push(`${this.fieldName}|||- Length should range from ${rule.constraints[0]} to ${rule.constraints[1]}|||${key}`);
 
                   break;
                 } case 'contains': {
@@ -41,7 +50,7 @@ const useRuler = () => {
                   }
 
                   if (rule.constraints[0] === 'letter' && !!!value.match('^(?=.*[A-Za-z])'))
-                    inconsistencies.push(`${this.fieldName}|||Should contain at least one letter`);
+                    inconsistencies.push(`${this.fieldName}|||- Should contain at least one letter|||${key}`);
 
                   break;
                 } default: {
@@ -57,7 +66,7 @@ const useRuler = () => {
     }
   }
 
-  const validate = (rules, fieldName, value) => {
+  const validate = (fieldName, value) => {
     for (var rule of rules) {
       if (rule.fieldName === fieldName) {
         return rule.executeRule(value);
@@ -65,9 +74,18 @@ const useRuler = () => {
     }
   };
 
+  const allFieldsValid = () => {
+    for(var ref of componentRefs) {
+      console.log(ref);
+    }    
+    
+    return false;
+  };
+
   return {
     initializeRuler,
-    validate
+    validate,
+    allFieldsValid
   };
 };
 
