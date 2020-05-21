@@ -19,11 +19,6 @@ const ErrorPopAnchor = (props) => {
       return 'none';
 
     let fieldName = `entered${props.component.current.outerText}`;
-    let test;
-
-    if (props.inconsistencies && props.inconsistencies.length > 0)
-      test = props.inconsistencies[0].split('|||')[0];
-
     if (props.inconsistencies && props.inconsistencies.length > 0 && props.inconsistencies[0].split('|||')[0] === fieldName) {
       return 'block';
     }
