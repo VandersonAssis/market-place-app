@@ -12,9 +12,11 @@ import TopBar from './TopBar';
 export default function Desktop(props) {
     return (
         <Grid justify="center" container >
-            <TopBar />            
+            <Grid item sm={12} >
+                <TopBar />
+            </Grid>
 
-            <Grid className="content" container item sm={9} >
+            <Grid className="content" item sm={9} >
                 <Box marginTop={1} width="100%" >
                     {props.children}
                 </Box>

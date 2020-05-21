@@ -1,14 +1,15 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 const useRuler = () => {
-  let componentRefs = new Array();
+  const [componentRefs, setComponentRefs] = useState(new Array());
   const [rules, setRules] = useState([]);
 
+  const addNewComponentRef = (newComponentRef) => setComponentRefs(componentRefs => [...componentRefs, newComponentRef]);
   const addNewRule = (newRule) => setRules(rules => [...rules, newRule]);
 
   const initializeRuler = (ruler) => {
     for (var rulerEntry of ruler) {
-      componentRefs.push(rulerEntry.componentRef);
+      addNewComponentRef(rulerEntry.ref);
 
       addNewRule(
         {
@@ -66,20 +67,37 @@ const useRuler = () => {
     }
   }
 
-  const validate = (fieldName, value) => {
+  const validate = (fieldName, fieldValue) => {
     for (var rule of rules) {
       if (rule.fieldName === fieldName) {
-        return rule.executeRule(value);
+        return rule.executeRule(fieldValue);
       }
     }
   };
 
   const allFieldsValid = () => {
-    for(var ref of componentRefs) {
-      console.log(ref);
-    }    
-    
-    return false;
+    for (var ref of componentRefs) {
+      let fieldData = loadFieldData(ref);
+      if(validate(fieldData.fieldName, fieldData.fieldValue).length > 0)
+        return false;
+    }
+
+    return true;
+  };
+
+  const loadFieldData = (ref) => {
+    let minifiedInnerHtml = ref.current.innerHTML.replace(/[\n\r]/, "");
+    let fieldName = `entered${ref.current.outerText}`;
+
+    // Loading from MaterialUI TextField
+    let fieldValue = minifiedInnerHtml.match('value="(.*)">');
+    if (!fieldValue) {
+
+      // Loading from MaterialUI TextArea (TextField with multiline setting to true)
+      fieldValue = minifiedInnerHtml.match('\">(?!.*">)(.*)</textarea>');
+    }
+
+    return { fieldName: fieldName, fieldValue: fieldValue[1] };
   };
 
   return {

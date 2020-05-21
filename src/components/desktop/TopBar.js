@@ -12,7 +12,7 @@ const TopBar = () => {
           <Link className="top-menu-item" to="/purchase">Buy</Link>
         </Grid>
 
-        <Grid item sm={2} wrap="wrap" >
+        <Grid item sm={2} >
           <span className="logged-in-user" >Vanderson (Admin View)</span>
         </Grid>
       </Grid>

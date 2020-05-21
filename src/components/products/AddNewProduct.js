@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import useHttp from '../hooks/useHttp';
 import useRuler from '../hooks/useRuler';
 import ErrorPopAnchor from '../ui/ErrorPopAnchor';
+import ErrorAlert from '../ui/ErrorAlert';
 
 export default function AddNewProduct() {
     const { sendRequest } = useHttp();
@@ -17,23 +18,22 @@ export default function AddNewProduct() {
     const [enteredDescription, setEnteredDescription] = useState('');
     const [enteredPrice, setEnteredPrice] = useState();
     const [enteredQuantity, setEnteredQuantity] = useState();
+    const [showErrorAlert, setShowErrorAlert] = useState(false);
 
     const enteredNameRef = useRef();
     const enteredModelRef = useRef();
     const enteredDescriptionRef = useRef();
     const enteredPriceRef = useRef();
     const enteredQuantityRef = useRef();
-    
-    const [inputInconsistencies, setInputInconsistencies] = useState('');
 
-    //const inputsToValidateUponSubmission = new Array(enteredNameRef, enteredModelRef);
+    const [inputInconsistencies, setInputInconsistencies] = useState('');
 
     useEffect(() => {
         initializeRuler(
             [
                 {
                     fieldName: 'enteredName',
-                    componentRef: enteredNameRef,
+                    ref: enteredNameRef,
                     rules: [
                         { name: 'range', constraints: [3, 51] },
                         { name: 'contains', constraints: ['letter'] }
@@ -49,7 +49,7 @@ export default function AddNewProduct() {
                 },
                 {
                     fieldName: 'enteredDescription',
-                    enteredDescriptionRef,
+                    ref: enteredDescriptionRef,
                     rules: [
                         { name: 'range', constraints: [15, 255] },
                         { name: 'contains', constraints: ['letter'] }
@@ -62,8 +62,8 @@ export default function AddNewProduct() {
     const submitNewProduct = event => {
         event.preventDefault();
 
-        if (!allFieldsValid()) {
-            alert('There is one or more invalid input');
+        if(!allFieldsValid()) {
+            setShowErrorAlert(true);
             return;
         }
 
@@ -83,63 +83,58 @@ export default function AddNewProduct() {
         setInputInconsistencies('');
         setEnteredPrice(0);
         setEnteredQuantity(0);
+        setShowErrorAlert(false);
     };
 
     const handleChange = (fieldName, setField, value) => {
         setField(value);
-        let inconsistencies = validate(fieldName, value);
-        setInputInconsistencies(inconsistencies);
-    }
-
-    const validateInputs = (fieldName, value) => {
-        let inconsistencies = validate(fieldName, value);
-
-        if (inconsistencies && inconsistencies.length > 0)
-            return false
-        else
-            return true;
+        setInputInconsistencies(validate(fieldName, value));
     }
 
     return (
-        <ExpansionPanel disabled={selectedSeller === null || selectedSeller === ''} >
-            <ExpansionPanelSummary expandIcon={<ExpandMore />} aria-controls="panel1a-content" id="panel1a-header" >
-                Add new product for&nbsp;<span className="selected-seller" >[{selectedSeller != null ? selectedSeller.name : null}]</span>
-            </ExpansionPanelSummary>
+        <>
+            <ExpansionPanel disabled={selectedSeller === null || selectedSeller === ''} >
+                <ExpansionPanelSummary expandIcon={<ExpandMore />} className="add-product-accordion" aria-controls="panel1a-content" id="panel1a-header" >
+                    Add new product for&nbsp;<span className="selected-seller" >[{selectedSeller != null ? selectedSeller.name : null}]</span>
+                </ExpansionPanelSummary>
 
-            <ExpansionPanelDetails className="panel-details" >
-                <Box width="100%" >
-                    <form onSubmit={submitNewProduct} >
-                        <TextField ref={enteredNameRef} className="text-field" label="Name" autoFocus={true} value={enteredName}
-                            onChange={event => { handleChange('enteredName', setEnteredName, event.target.value) }} />
-                        <ErrorPopAnchor component={enteredNameRef} inconsistencies={inputInconsistencies} />
+                <ExpansionPanelDetails className="panel-details" >
+                    <Box width="100%" >
+                        <ErrorAlert show={ showErrorAlert } />
+                                                
+                        <form onSubmit={submitNewProduct} >
+                            <TextField ref={enteredNameRef} className="text-field" label="Name" value={enteredName}
+                                onChange={event => { handleChange('enteredName', setEnteredName, event.target.value) }} />
+                            <ErrorPopAnchor component={enteredNameRef} inconsistencies={inputInconsistencies} />
 
-                        <br />
-                        <TextField ref={enteredModelRef} className="text-field" label="Model" value={enteredModel}
-                            onChange={event => { handleChange('enteredModel', setEnteredModel, event.target.value) }} />
-                        <ErrorPopAnchor component={enteredModelRef} inconsistencies={inputInconsistencies} />
+                            <br />
+                            <TextField ref={enteredModelRef} className="text-field" label="Model" value={enteredModel}
+                                onChange={event => { handleChange('enteredModel', setEnteredModel, event.target.value) }} />
+                            <ErrorPopAnchor component={enteredModelRef} inconsistencies={inputInconsistencies} />
 
-                        <br />
-                        <TextField ref={enteredPriceRef} className="text-field" label="Price" type="number" value={enteredPrice}
-                            onChange={event => { setEnteredPrice(event.target.value) }} />
-                        <ErrorPopAnchor component={enteredPriceRef} inconsistencies={inputInconsistencies} />
+                            <br />
+                            <TextField ref={enteredPriceRef} className="text-field" label="Price" type="number" value={enteredPrice}
+                                onChange={event => { setEnteredPrice(event.target.value) }} />
+                            <ErrorPopAnchor component={enteredPriceRef} inconsistencies={inputInconsistencies} />
 
-                        <br />
-                        <TextField ref={enteredQuantityRef} className="text-field" label="Quantity" type="number" value={enteredQuantity}
-                            onChange={event => { setEnteredQuantity(event.target.value) }} />
-                        <ErrorPopAnchor component={enteredQuantityRef} inconsistencies={inputInconsistencies} />
+                            <br />
+                            <TextField ref={enteredQuantityRef} className="text-field" label="Quantity" type="number" value={enteredQuantity}
+                                onChange={event => { setEnteredQuantity(event.target.value) }} />
+                            <ErrorPopAnchor component={enteredQuantityRef} inconsistencies={inputInconsistencies} />
 
-                        <br />
-                        <TextField ref={enteredDescriptionRef} className="text-field" label="Description" multiline={true} rows="4" value={enteredDescription}
-                            onChange={event => { handleChange('enteredDescription', setEnteredDescription, event.target.value) }} />
-                        <ErrorPopAnchor component={enteredDescriptionRef} inconsistencies={inputInconsistencies} />
+                            <br />
+                            <TextField ref={enteredDescriptionRef} className="text-field" label="Description" multiline={true} rows="4" value={enteredDescription}
+                                onChange={event => { handleChange('enteredDescription', setEnteredDescription, event.target.value) }} />
+                            <ErrorPopAnchor component={enteredDescriptionRef} inconsistencies={inputInconsistencies} />
 
-                        <br /> <br />
-                        <Button color="primary" type="submit" variant="contained" >
-                            REGISTER
+                            <br /> <br />
+                            <Button color="primary" type="submit" variant="contained" >
+                                REGISTER
                         </Button>
-                    </form>
-                </Box>
-            </ExpansionPanelDetails>
-        </ExpansionPanel>
+                        </form>
+                    </Box>
+                </ExpansionPanelDetails>
+            </ExpansionPanel>
+        </>
     )
 }
