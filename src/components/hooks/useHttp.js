@@ -1,7 +1,7 @@
 import { useReducer } from 'react';
 
 const initialState = {
-    loading: false, error: null, data: []
+    loading: false, error: null, data: { result: [], statusCode: 0, message: '' }
 };
 
 const httpReducer = (currentState, action) => {
@@ -14,7 +14,7 @@ const httpReducer = (currentState, action) => {
             return { loading: false, error: action.errorMessage };
         case 'CLEAR': {
             console.log('Cleared...');
-            
+
             return initialState;
         }
         default:
@@ -26,22 +26,24 @@ const useHttp = () => {
     const [httpState, dispatchHttp] = useReducer(httpReducer, initialState);
 
     const clear = () => dispatchHttp({ type: 'CLEAR' });
-
-    const sendRequest = (url, method, body) => {
+    const sendRequest = async (url, method, body) => {
         clear();
-
         dispatchHttp({ type: 'SEND' })
-        
-        // setTimeout(() => {
-            fetch(url, { method: method, body: body, headers: { 'Content-Type': 'application/json' } })
-                .then(res => {
-                    return res.json();
-                }).then(data => {                    
-                    dispatchHttp({ type: 'RESPONSE', data: data });
-                }).catch(error => {
-                    dispatchHttp({ type: 'ERROR', errorMessage: 'Something went wrong! A more descriptive log has been saved on the server' });
-                })
-        // }, 1500);
+
+        try {
+            let response = await fetch(url, { method: method, body: body, headers: { 'Content-Type': 'application/json' } });
+            let result = await response.json();
+            let data = { result: result, statusCode: response.status, message: result.message }
+            dispatchHttp({ type: 'RESPONSE', data: data });
+        } catch(error) {
+            dispatchHttp({ type: 'ERROR', errorMessage: 'Something went wrong! A more descriptive log has been saved on the server' });
+        }
+    }
+
+    const sendPromisableRequest = async (url, method, body) => {
+        let response = await fetch(url, { method: method, body: body, headers: { 'Content-Type': 'application/json' } });
+        let result = await response.json();
+        return { result: result, statusCode: response.status, message: result.message };
     }
 
     return {
@@ -49,6 +51,7 @@ const useHttp = () => {
         data: httpState.data,
         error: httpState.error,
         sendRequest: sendRequest,
+        sendPromisableRequest: sendPromisableRequest,
         clear: clear
     };
 };

@@ -8,7 +8,7 @@ import ErrorPopAnchor from '../ui/ErrorPopAnchor';
 import ErrorAlert from '../ui/ErrorAlert';
 
 export default function AddNewProduct() {
-    const { sendRequest } = useHttp();
+    const { sendPromisableRequest } = useHttp();
     const { initializeRuler, validate, allFieldsValid } = useRuler();
 
     const selectedSeller = useSelector(state => state.selectedSeller);
@@ -19,6 +19,7 @@ export default function AddNewProduct() {
     const [enteredPrice, setEnteredPrice] = useState();
     const [enteredQuantity, setEnteredQuantity] = useState();
     const [showErrorAlert, setShowErrorAlert] = useState(false);
+    const [errorAlertMessage, setErrorAlertMessage] = useState('');
 
     const enteredNameRef = useRef();
     const enteredModelRef = useRef();
@@ -59,11 +60,12 @@ export default function AddNewProduct() {
         )
     }, []);
 
-    const submitNewProduct = event => {
+    const submitNewProduct = async event => {
         event.preventDefault();
 
-        if(!allFieldsValid()) {
+        if (!allFieldsValid()) {
             setShowErrorAlert(true);
+            setErrorAlertMessage('One or more fields are invalid.');
             return;
         }
 
@@ -72,8 +74,13 @@ export default function AddNewProduct() {
             price: enteredPrice, quantity: enteredQuantity
         };
 
-        sendRequest(process.env.REACT_APP_PRODUCTS_API_URL, 'POST', JSON.stringify(newProduct));
-        clearFields();
+        let data = await sendPromisableRequest(process.env.REACT_APP_PRODUCTS_API_URL, 'POST', JSON.stringify(newProduct));
+        
+        if(data.statusCode === 201)
+            clearFields();
+        else
+            setErrorAlertMessage(data.message);
+
     };
 
     const clearFields = () => {
@@ -84,6 +91,7 @@ export default function AddNewProduct() {
         setEnteredPrice(0);
         setEnteredQuantity(0);
         setShowErrorAlert(false);
+        setErrorAlertMessage('');
     };
 
     const handleChange = (fieldName, setField, value) => {
@@ -95,13 +103,13 @@ export default function AddNewProduct() {
         <>
             <ExpansionPanel disabled={selectedSeller === null || selectedSeller === ''} >
                 <ExpansionPanelSummary expandIcon={<ExpandMore />} className="add-product-accordion" aria-controls="panel1a-content" id="panel1a-header" >
-                    Add new product for&nbsp;<span className="selected-seller" >[{selectedSeller != null ? selectedSeller.name : null}]</span>
+                    Add a new product for&nbsp;<span className="selected-seller" >[{selectedSeller != null ? selectedSeller.name : null}]</span>
                 </ExpansionPanelSummary>
 
                 <ExpansionPanelDetails className="panel-details" >
                     <Box width="100%" >
-                        <ErrorAlert show={ showErrorAlert } />
-                                                
+                        <ErrorAlert show={showErrorAlert} message={errorAlertMessage} />
+
                         <form onSubmit={submitNewProduct} >
                             <TextField ref={enteredNameRef} className="text-field" label="Name" value={enteredName}
                                 onChange={event => { handleChange('enteredName', setEnteredName, event.target.value) }} />

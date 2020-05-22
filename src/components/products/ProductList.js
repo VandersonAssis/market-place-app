@@ -30,11 +30,11 @@ const ProductList = () => {
       return <LoadingIndicator><div className="container" ><span className="products-label" >Products</span></div></LoadingIndicator>
     else
       return <div className="container" >
-        {data.length > 0 ? <div className="products-label" >Products</div> : null} <br />
+        {data.result.length > 0 ? <div className="products-label" >Products</div> : null} <br />
 
         <GridList cellHeight={250} className="grid-list" cols={3} >
           {
-            data.length > 0 ? data.map(product => (
+            data.result.length > 0 ? data.result.map(product => (
               <GridListTile key={product.id} cols={product.cols || 1} >
                 <ProductListItem product={product} />
               </GridListTile>
