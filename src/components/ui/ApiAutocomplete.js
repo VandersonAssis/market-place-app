@@ -21,7 +21,7 @@ const ApiAutocomplete = props => {
             return <LoadingIndicator>{dummyAutocomplete}</LoadingIndicator>
         else
             return <Autocomplete
-                options={data.length > 0 ? data : []}
+                options={data.result.length > 0 ? data.result : []}
                 getOptionLabel={(option) => option.name}
                 onChange={(event, value) => props.onSelectionCallback(value)}
                 renderInput={(params) => <TextField {...params} label={props.placeHolder ? props.placeHolder : 'Select a value'} variant="outlined" />} />

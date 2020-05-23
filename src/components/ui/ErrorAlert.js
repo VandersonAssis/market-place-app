@@ -17,7 +17,7 @@ const ErrorAlert = (props) => {
 
   return (
     <div style={containerStyle} >
-      <span style={contentStyle} >One or more fields are invalid.</span>
+      <span style={contentStyle} >{props.message}</span>
     </div>
   )
 }
