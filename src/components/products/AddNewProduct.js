@@ -1,13 +1,16 @@
-import { ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, FormControl, TextField, Grid, Box, Button, unstable_StrictModeFade, Popover } from '@material-ui/core';
+import { Box, Button, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, TextField } from '@material-ui/core';
 import { ExpandMore } from '@material-ui/icons';
-import React, { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useRef, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import useHttp from '../hooks/useHttp';
 import useRuler from '../hooks/useRuler';
-import ErrorPopAnchor from '../ui/ErrorPopAnchor';
 import ErrorAlert from '../ui/ErrorAlert';
+import ErrorPopAnchor from '../ui/ErrorPopAnchor';
+import productManagementActions from '../../redux/constants/productManagement.constants';
 
 export default function AddNewProduct() {
+    const dispatch = useDispatch();
+
     const { sendPromisableRequest } = useHttp();
     const { initializeRuler, validate, allFieldsValid } = useRuler();
 
@@ -64,8 +67,7 @@ export default function AddNewProduct() {
         event.preventDefault();
 
         if (!allFieldsValid()) {
-            setShowErrorAlert(true);
-            setErrorAlertMessage('One or more fields are invalid.');
+            displayErrorAlert('One or more fields are invalid.');
             return;
         }
 
@@ -75,13 +77,21 @@ export default function AddNewProduct() {
         };
 
         let data = await sendPromisableRequest(process.env.REACT_APP_PRODUCTS_API_URL, 'POST', JSON.stringify(newProduct));
-        
-        if(data.statusCode === 201)
+
+        if (data.statusCode === 201) {
             clearFields();
-        else
-            setErrorAlertMessage(data.message);
+            dispatch({ type: productManagementActions.PRODUCT_ADDED, addedProduct: data.result })
+        }
+        else {
+            displayErrorAlert(data.message);
+        }
 
     };
+
+    const displayErrorAlert = (message) => {
+        setErrorAlertMessage(message);
+        setShowErrorAlert(true);
+    }
 
     const clearFields = () => {
         setEnteredName('');

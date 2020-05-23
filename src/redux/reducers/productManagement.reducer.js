@@ -1,7 +1,8 @@
 import productManagementActions from '../constants/productManagement.constants';
 
 const INITIAL_STATE = {
-    selectedSeller: ''
+    selectedSeller: '',
+    addedProduct: undefined
 }
 
 export function productManagement(state = INITIAL_STATE, action) {
@@ -10,6 +11,8 @@ export function productManagement(state = INITIAL_STATE, action) {
             return { ...state, selectedSeller: action.selectedSeller };
         case productManagementActions.SELLER_UNSELECTED:
             return INITIAL_STATE;
+        case productManagementActions.PRODUCT_ADDED:
+            return { ...state, addedProduct: action.addedProduct }
         default:
             return state;
     }
