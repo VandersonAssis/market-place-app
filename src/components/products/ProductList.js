@@ -1,4 +1,4 @@
-import { GridList, GridListTile } from '@material-ui/core';
+import { GridList, GridListTile, Box } from '@material-ui/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import useHttp from '../hooks/useHttp';
@@ -7,8 +7,8 @@ import ProductListItem from './ProductListItem';
 
 const ProductList = () => {
   const { loading, data, error, sendRequest, clear } = useHttp();
-  const {selectedSeller, addedProduct } = useSelector(state => state);
-  const [productList, setProductList] = useState({result: []});
+  const { selectedSeller, addedProduct } = useSelector(state => state);
+  const [productList, setProductList] = useState({ result: [] });
   const initialRender = useRef(true);
 
   useEffect(() => {
@@ -16,13 +16,13 @@ const ProductList = () => {
   }, [selectedSeller]);
 
   useEffect(() => {
-    if(!addedProduct) return;
+    if (!addedProduct) return;
 
     const newList = JSON.parse(JSON.stringify(productList));
 
-    if(!Array.isArray(newList.result))
+    if (!Array.isArray(newList.result))
       newList.result = new Array();
-    
+
     newList.result.push(addedProduct);
     setProductList(newList);
   }, [addedProduct]);
@@ -37,7 +37,10 @@ const ProductList = () => {
       return;
     }
 
-    if (selectedSeller === null || selectedSeller === '') return;
+    if (selectedSeller === null || selectedSeller === '') {
+      setProductList([]);
+      return;
+    }
 
     sendRequest(`${process.env.REACT_APP_PRODUCTS_API_URL}/${selectedSeller.id}/seller`, 'GET');
   };
@@ -51,12 +54,12 @@ const ProductList = () => {
       return <LoadingIndicator><div className="container" ><span className="products-label" >Products</span></div></LoadingIndicator>
     else
       return <div className="container" >
-        {productList.result.length > 0 ? <div className="products-label" >Products</div> : null} <br />
-
-        <GridList cellHeight={250} className="grid-list" cols={3} >
+        <br />
+        {productList.result && productList.result.length > 0 ? <div className="products-label" >Products</div> : null}
+        <GridList className="grid-list" cols={3} >
           {
-            productList.result.length > 0 ? productList.result.map(product => (
-              <GridListTile key={product.id} cols={product.cols || 1} >
+            productList.result && productList.result.length > 0 ? productList.result.map(product => (
+              <GridListTile style={{height: 'auto'}} key={product.id} >
                 <ProductListItem product={product} />
               </GridListTile>
             )) : []

@@ -3,6 +3,7 @@ import '../ui/css/ApiAutocomplete.css';
 import '../ui/css/LoadingIndicator.css';
 import '../products/css/ProductManagement.css';
 import '../products/css/ProductList.css';
+import '../products/css/ProductListItem.css';
 import '../products/css/AddNewProduct.css';
 import './css/Desktop.css';
 import './css/TopBar.css';
