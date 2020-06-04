@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { TextField, CircularProgress } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import LoadingIndicator from './LoadingIndicator';
 import useHttp from '../hooks/useHttp';
