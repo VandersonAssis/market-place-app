@@ -40,9 +40,11 @@ Ps.: I'm currently living in Brazil but willing to relocate to another country. 
 - Maven
 
 #### Frontend:
-- React 16 (Frontend App)
+- React 16
 - Redux
 - React Hooks
+- Jest
+- Enzyme
 - Material-UI
 - Less (Helps a lot when coding CSS)
 - Grunt (Task automation)
