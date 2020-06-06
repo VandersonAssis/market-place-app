@@ -7,7 +7,7 @@ const TopBar = () => {
     <>
       <Grid className="top-menu-container" container >
         <Grid item sm={10} >          
-          <span className="top-menu-app-name" >Market Place</span>
+          <span className="top-menu-app-name" >EMarket Place</span>
           <Link className="top-menu-item" to="/products">Products</Link>
           <Link className="top-menu-item" to="/purchase">Buy</Link>
         </Grid>
